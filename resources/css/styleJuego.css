@@ -164,6 +164,8 @@ body {
     flex-direction: column;
     height: 100vh;
     overflow-x: hidden;
+    min-width: 0;
+    min-height: 0;
   }
   .panel-dinosaurios {
     width: 100vw;
@@ -181,7 +183,6 @@ body {
     padding: 14px 0 14px 8px;
     gap: 12px;
     background: #111;
-    /* Mejora el área de scroll para el dedo */
     scrollbar-width: thin;
     scrollbar-color: #7ed957 #222;
   }
@@ -194,8 +195,12 @@ body {
     box-shadow: 0 2px 8px #0004;
     background: #fff;
     touch-action: pan-x;
+    transition: transform .2s, filter .2s;
   }
-  /* Scrollbar visible en navegadores compatibles */
+  .panel-dinosaurios img:active {
+    transform: scale(1.08);
+    filter: brightness(1.2);
+  }
   .panel-dinosaurios::-webkit-scrollbar {
     height: 8px;
     background: #222;
@@ -213,7 +218,9 @@ body {
     justify-content: center;
     align-items: flex-start;
     overflow-y: auto;
-    padding-bottom: 150px !important; 
+    padding-bottom: 150px !important;
+    min-width: 0;
+    min-height: 0;
   }
   .recinto {
     width: 44vw;
@@ -223,19 +230,42 @@ body {
     margin: 0 2vw 10px 2vw;
     padding: 6px 2px 10px 2px;
     font-size: 0.97rem;
+    box-shadow: 0 2px 8px #0006;
+    border-radius: 12px;
+    background: rgba(30,30,30,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
   }
   .recinto h3 {
     font-size: 1rem;
     margin-bottom: 4px;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,0.5);
+    border-radius: 4px;
+    padding: 2px 0;
   }
   .dropzone {
     min-height: 32px;
     min-width: 40px;
     gap: 4px;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    background: none;
+    padding: 0;
   }
   .dropzone img {
     height: 28px;
     max-width: 28px;
+    border-radius: 6px;
+    margin: 2px;
+    box-shadow: 0 1px 4px #0003;
+    background: #fff;
   }
   .puntaje {
     position: fixed;
@@ -250,6 +280,7 @@ body {
     border-top: 2px solid #444;
     border-radius: 10px;
     z-index: 1100;
+    box-shadow: 0 2px 8px #0006;
   }
   .puntaje span {
     font-size: 1rem;
@@ -273,10 +304,11 @@ body {
     border-radius: 10px;
     margin: 0;
     z-index: 1101;
+    box-shadow: 0 2px 8px #0006;
   }
   .btn-volver {
     position: fixed;
-    left: 140px; 
+    left: 140px;
     bottom: 8px;
     right: auto;
     width: auto;
@@ -285,5 +317,6 @@ body {
     border-radius: 10px;
     margin: 0;
     z-index: 1101;
+    box-shadow: 0 2px 8px #0006;
   }
 }

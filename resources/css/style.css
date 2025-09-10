@@ -1,22 +1,25 @@
-
 html, body {
   height: 100%;
   min-height: 100vh;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  overflow-y: auto;
+  min-width: 357px;
+  min-height: 576px;
 }
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   width: 100vw;
-  background: url('ICONOS MENU/Fondo.jpg') no-repeat center center fixed;
+  background: url('/public/images/menu-icons/Fondo.jpg') no-repeat center center fixed;
   background-size: cover;
   font-family: Arial, Helvetica, sans-serif;
   position: relative;
   animation: pageFade 500ms ease-out;
 }
+
 @keyframes pageFade { from{opacity:0} to{opacity:1} }
 body::before {
   content: "";
@@ -24,7 +27,7 @@ body::before {
   inset: 0;
   background: rgba(0,0,0,.25);
   z-index: 0;
-  pointer-events: none; /* no bloquea clics */
+  pointer-events: none; 
 }
 
 :root {
@@ -40,6 +43,8 @@ body::before {
   margin: 0 auto;
   width: 100%;
   max-width: 100vw;
+  min-width: 357px;
+  min-height: 576px;
 }
 
 /* Título animado */
@@ -57,6 +62,7 @@ body::before {
   margin-right: auto;
   text-align: center;
 }
+
 @keyframes zoomTambaleo {
   0%{transform:scale(1) rotate(0deg)}
   10%{transform:scale(1.05) rotate(0deg)}
@@ -134,6 +140,7 @@ body::before {
   background: rgba(0,0,0,0.55);
   backdrop-filter: blur(2px);
 }
+
 .modal-content {
   position: relative;
   width: 100%;
@@ -144,7 +151,7 @@ body::before {
   box-shadow: 0 12px 48px #000c;
   background:
     linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
-    url('ICONOS MENU/pabntallaLogin.png') center center / cover no-repeat,
+    url('/public/images/menu-icons/pabntallaLogin.png') center center / cover no-repeat,
     #1f1f1f;
   animation: modalPop 220ms ease-out;
   padding: 28px 20px 22px 20px;
@@ -152,11 +159,31 @@ body::before {
   flex-direction: column;
   align-items: center;
 }
+
 @keyframes modalPop{ from{transform:scale(.96);opacity:0} to{transform:scale(1);opacity:1} }
 .close {
-  position:absolute; right: 10px; top: 6px;
-  font-size: 28px; color:#fff; cursor:pointer;
+  position: absolute;
+  top: -20px;
+  left: 144px;
+  font-size: 28px;
+  color: #fff;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 0;
+  width: auto;
+  height: auto;
+  display: block;
+  line-height: 1;
+  z-index: 20;
+  transition: color 0.18s, transform 0.18s;
   text-shadow: 0 2px 8px #000a;
+}
+.close:hover,
+.close:focus {
+  color: #e74c3c;
+  transform: scale(1.18);
+  outline: none;
 }
 
 /* Panel interior */
@@ -177,6 +204,7 @@ body::before {
 
 /* Formulario */
 .modal-form { margin-top: 6px; }
+
 .modal-content input, .modal-content button {
   width: 100%;
   margin: 8px 0;
@@ -184,6 +212,7 @@ body::before {
   border-radius: 12px;
   border: none;
 }
+
 .btn-primary-hero {
   background: linear-gradient(180deg, var(--hero), var(--hero-dark));
   color: #0d1b12;
@@ -211,7 +240,7 @@ body::before {
   text-align: center;
   backdrop-filter: blur(2px);
   pointer-events: auto;
-  z-index: 1200; /* sobre .container (z:1) y auth-bar (1100) */
+  z-index: 1200; 
 }
 .site-footer .social {
   margin: 6px 0;
@@ -256,10 +285,10 @@ body::before {
     justify-content: flex-end;
   }
   .auth-btn {
-  font-size: 0.9rem;
-  padding: 6px 14px;
-  min-width: auto;
-  max-width: none;
+    font-size: 0.9rem;
+    padding: 6px 14px;
+    min-width: auto;
+    max-width: none;
   }
   
   .menu {
@@ -278,8 +307,45 @@ body::before {
   }
 }
 
-/* Escritorio */
-@media (min-width: 1000px) {
+/* Intermedia: tablets y pantallas medianas */
+@media (min-width: 701px) and (max-width: 1199px) {
+  .container {
+    max-width: 98vw;
+    margin: 0 auto;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .titulo {
+    width: clamp(240px, 60vw, 700px);
+    max-width: 90vw;
+    margin-top: 40px;
+    margin-bottom: 24px;
+  }
+  .menu {
+    margin-top: 18px;
+    gap: 3vw;
+    flex-wrap: wrap;
+  }
+  .boton-img {
+    width: clamp(100px, 18vw, 210px);
+    max-width: 40vw;
+    min-width: 100px;
+    margin: 14px 0;
+  }
+  .site-footer {
+    position: static;
+    width: 100vw;
+    margin: 0;
+    z-index: 1200;
+  }
+}
+
+/* Escritorio grande */
+@media (min-width: 1200px) {
   .container {
     max-width: min(1100px, 92vw);
     margin: 0 auto;
@@ -299,6 +365,7 @@ body::before {
   .menu {
     margin-top: clamp(8px, 2vh, 24px);
     gap: clamp(20px, 3vw, 56px);
+    flex-wrap: wrap;
   }
   .boton-img {
     width: clamp(140px, 12vw, 240px);
@@ -315,5 +382,6 @@ body::before {
     margin: 0;
     z-index: 1200; /* asegura clics */
   }
-  html, body { overflow-y: hidden; }
+  /* Permitir scroll vertical en escritorio */
+  html, body { overflow-y: auto; }
 }

@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.panel-dinosaurios img').forEach(img => {
     img.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData("src", e.target.src);
-      e.dataTransfer.setData("alt", e.target.alt);
+  // Solo guarda el nombre de archivo para compatibilidad con asset()
+  const srcName = e.target.src.split('/').pop();
+  e.dataTransfer.setData("src", srcName);
+  e.dataTransfer.setData("alt", e.target.alt);
     });
   });
 
@@ -10,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zone.addEventListener('dragover', e => e.preventDefault());
     zone.addEventListener('drop', e => {
       e.preventDefault();
-      const src = e.dataTransfer.getData("src");
+  const srcName = e.dataTransfer.getData("src");
       const alt = e.dataTransfer.getData("alt");
       const recintoIndex = getRecintoIndex(zone);
 
@@ -26,8 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // Busca la imagen original en el panel y usa su src completo
+      const panelImgs = document.querySelectorAll('.panel-dinosaurios img');
+      let fullSrc = '';
+      for (const img of panelImgs) {
+        if (img.src.split('/').pop() === srcName) {
+          fullSrc = img.src;
+          break;
+        }
+      }
       const newDino = document.createElement('img');
-      newDino.src = src;
+      newDino.src = fullSrc || srcName;
       newDino.alt = alt;
       newDino.draggable = false;
       newDino.style.height = '50px';
@@ -87,88 +98,143 @@ function puedeAgregarDinosaurio(zone, recinto, alt) {
   }
 }
 
-function limpiarRecinto(recintoId) {
+window.limpiarRecinto = function(recintoId) {
   const dropzone = document.querySelector(`#${recintoId} .dropzone`);
-  dropzone.innerHTML = '';
+  if (dropzone) {
+    // Elimina solo los <img> dentro del recinto
+    const imgs = dropzone.querySelectorAll('img');
+    imgs.forEach(img => img.remove());
+  }
+  const num = recintoId.replace('recinto','');
+  const puntosSpan = document.getElementById(`puntos-recinto${num}`);
+  if (puntosSpan) puntosSpan.innerText = '0';
   updateScore();
 }
 
 function updateScore() {
+  
   let total = 0;
-
   // Recinto 1
   const r1 = document.querySelector('#recinto1 .dropzone');
   const r1Dinos = Array.from(r1.querySelectorAll('img'));
+  let puntosR1 = 0;
   if (
     r1Dinos.length > 0 &&
     r1Dinos.length <= 6 &&
     r1Dinos.every(img => img.alt === r1Dinos[0].alt)
   ) {
-    const puntosR1 = [0, 2, 4, 8, 12, 18, 24]; // índice = cantidad de dinosaurios
-    total += puntosR1[r1Dinos.length];
+    const arr = [0, 2, 4, 8, 12, 18, 24];
+    puntosR1 = arr[r1Dinos.length];
   }
+  document.getElementById('puntos-recinto1').innerText = puntosR1;
+  total += puntosR1;
 
   // Recinto 2
   const r2 = document.querySelector('#recinto2 .dropzone');
   const r2Dinos = Array.from(r2.querySelectorAll('img'));
+  let puntosR2 = 0;
   if (r2Dinos.length === 3) {
-    total += 7;
+    puntosR2 = 7;
   }
+
+  document.getElementById('puntos-recinto2').innerText = puntosR2;
+  total += puntosR2;
 
   // Recinto 3
   const r3 = document.querySelector('#recinto3 .dropzone');
   const r3Dinos = Array.from(r3.querySelectorAll('img'));
+  let puntosR3 = 0;
   if (
     r3Dinos.length === 2 &&
     r3Dinos[0].alt === r3Dinos[1].alt
   ) {
-    total += 5;
+    puntosR3 = 5;
   }
+  document.getElementById('puntos-recinto3').innerText = puntosR3;
+  total += puntosR3;
 
   // Recinto 4
   const r4 = document.querySelector('#recinto4 .dropzone');
   const r4Dinos = Array.from(r4.querySelectorAll('img'));
+  let puntosR4 = 0;
   if (r4Dinos.length === 1) {
-    // Especie más común en el tablero
     const especie = r4Dinos[0].alt;
     const allDinos = getAllDinos();
     const especieMasComun = getEspecieMasComun(allDinos);
     if (especie === especieMasComun) {
-      total += 7;
+      puntosR4 = 7;
     }
   }
+  document.getElementById('puntos-recinto4').innerText = puntosR4;
+  total += puntosR4;
 
   // Recinto 5
   const r5 = document.querySelector('#recinto5 .dropzone');
   const r5Dinos = Array.from(r5.querySelectorAll('img'));
+  let puntosR5 = 0;
   if (
     r5Dinos.length > 0 &&
     r5Dinos.length <= 6
   ) {
-    const puntosR5 = [0, 1, 3, 6, 10, 15, 21];
-    total += puntosR5[r5Dinos.length];
+    const arr = [0, 1, 3, 6, 10, 15, 21];
+    puntosR5 = arr[r5Dinos.length];
   }
+  document.getElementById('puntos-recinto5').innerText = puntosR5;
+  total += puntosR5;
 
   // Recinto 6
   const r6 = document.querySelector('#recinto6 .dropzone');
   const r6Dinos = Array.from(r6.querySelectorAll('img'));
+  let puntosR6 = 0;
   if (r6Dinos.length === 1) {
     const especie = r6Dinos[0].alt;
     const allDinos = getAllDinos();
     const count = allDinos.filter(img => img.alt === especie).length;
     if (count === 1) {
-      total += 7;
+      puntosR6 = 7;
     }
   }
+  document.getElementById('puntos-recinto6').innerText = puntosR6;
+  total += puntosR6;
 
   // Recinto 7
   const r7 = document.querySelector('#recinto7 .dropzone');
   const r7Dinos = Array.from(r7.querySelectorAll('img'));
+  let puntosR7 = 0;
   if (r7Dinos.length === 1) {
-    total += 1;
+    puntosR7 = 1;
   }
+  document.getElementById('puntos-recinto7').innerText = puntosR7;
+  total += puntosR7;
 
   document.getElementById("puntos").innerText = total;
+}
+// Atajo Ctrl+D para mostrar especificaciones de recintos
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key.toLowerCase() === 'd') {
+    e.preventDefault();
+    toggleEspecificacionesRecintos();
+  }
+});
+
+function toggleEspecificacionesRecintos() {
+  const specs = [
+    '<b>Recinto 1:</b> Solo permite dinosaurios de la misma especie. Máximo 6. Puntos: 2, 4, 8, 12, 18, 24 según cantidad.',
+    '<b>Recinto 2:</b> Permite cualquier especie. Máximo 3. Puntos: 7 si hay 3.',
+    '<b>Recinto 3:</b> Solo permite dinosaurios de la misma especie. Máximo 2. Puntos: 5 si hay 2 iguales.',
+    '<b>Recinto 4:</b> Solo uno. Puntos: 7 si es la especie más común en el tablero.',
+    '<b>Recinto 5:</b> Permite cualquier especie. Máximo 6. Puntos: 1, 3, 6, 10, 15, 21 según cantidad.',
+    '<b>Recinto 6:</b> Solo uno. Puntos: 7 si es la única vez que aparece esa especie en el tablero.',
+    '<b>Recinto 7:</b> Solo uno. Puntos: 1 si hay uno.'
+  ];
+  const div = document.getElementById('especificaciones-recintos');
+  if (div.style.display === 'block') {
+    div.style.display = 'none';
+    div.innerHTML = '';
+  } else {
+    div.innerHTML = specs.map(s => `<div style='margin-bottom:8px;'>${s}</div>`).join('');
+    div.style.display = 'block';
+  }
 }
 
 function getAllDinos() {
@@ -209,9 +275,9 @@ function drop(ev, dropzone) {
 // Touch Drag & Drop (móvil)
 let touchDino = null;
 
+// Adaptar drag & drop móvil a los nuevos estilos responsivos
 document.querySelectorAll('.panel-dinosaurios img').forEach(img => {
   img.addEventListener('touchstart', function(e) {
-    // Quitar 'dragging' de todos antes de marcar el nuevo
     document.querySelectorAll('.panel-dinosaurios img').forEach(i => i.classList.remove('dragging'));
     img.classList.add('dragging');
     touchDino = img;
@@ -221,11 +287,13 @@ document.querySelectorAll('.panel-dinosaurios img').forEach(img => {
 
 document.querySelectorAll('.dropzone').forEach(zone => {
   zone.addEventListener('touchmove', function(e) {
-    e.preventDefault(); // Evita scroll mientras arrastras
+    e.preventDefault();
   });
   zone.addEventListener('touchend', function(e) {
     if (touchDino) {
-      agregarDinoADropzone(touchDino.src, zone);
+      // Usar srcName para compatibilidad con los estilos y lógica
+      const srcName = touchDino.src.split('/').pop();
+      agregarDinoADropzone(srcName, zone);
       touchDino.classList.remove('dragging');
       touchDino = null;
     }
@@ -234,16 +302,10 @@ document.querySelectorAll('.dropzone').forEach(zone => {
 });
 
 // Quitar la clase 'dragging' si no se suelta el dinosaurio en un recinto
-
-// Para drag & drop de escritorio
 document.querySelectorAll('.panel-dinosaurios img').forEach(img => {
   img.addEventListener('dragend', function() {
     img.classList.remove('dragging');
   });
-});
-
-// Para touch en móvil
-document.querySelectorAll('.panel-dinosaurios img').forEach(img => {
   img.addEventListener('touchend', function() {
     setTimeout(() => img.classList.remove('dragging'), 100);
   });
@@ -252,19 +314,19 @@ document.querySelectorAll('.panel-dinosaurios img').forEach(img => {
   });
 });
 
-function agregarDinoADropzone(src, dropzone) {
-  // Obtener alt del dinosaurio (especie)
+function agregarDinoADropzone(srcName, dropzone) {
+  // Busca el alt y src completo en el panel de dinosaurios
   let alt = "";
-  // Busca el alt en el panel de dinosaurios
+  let fullSrc = "";
   const panelImgs = document.querySelectorAll('.panel-dinosaurios img');
   for (const img of panelImgs) {
-    if (img.src === src || img.src.endsWith(src)) {
+    if (img.src.split('/').pop() === srcName) {
       alt = img.alt;
+      fullSrc = img.src;
       break;
     }
   }
-  // Si no se encontró, intenta extraerlo del src
-  if (!alt) alt = src.split('/').pop();
+  if (!alt) alt = srcName;
 
   const recintoIndex = getRecintoIndex(dropzone);
 
@@ -280,7 +342,7 @@ function agregarDinoADropzone(src, dropzone) {
 
   // Agregar dinosaurio
   const img = document.createElement("img");
-  img.src = src;
+  img.src = fullSrc || srcName;
   img.alt = alt;
   img.draggable = false;
   img.className = "dropped-dino";

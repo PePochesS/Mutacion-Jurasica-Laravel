@@ -28,7 +28,7 @@ main.container{ width:min(1100px,92%); margin:0 auto; flex:1; padding-top:40px }
   position:fixed; inset:0;
   background:
     linear-gradient(var(--bg-overlay),var(--bg-overlay)),
-    url('ICONOS MENU/FondodePantallaR.png') center center / cover no-repeat;
+    url('/public/images/menu-icons/FondodePantallaR.png') center center / cover no-repeat;
   background-attachment: fixed;
   filter:saturate(110%);
   z-index:-1;

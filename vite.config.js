@@ -3,11 +3,19 @@ import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-    plugins: [
-        laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-        }),
-        tailwindcss(),
-    ],
-});
+  plugins: [
+    laravel({
+      input: [
+        // CSS
+        'resources/css/style.css',
+        'resources/css/styleJuego.css',
+        'resources/css/styleR.css',
+        // JS
+        'resources/js/scriptM.js',
+        'resources/js/scriptR.js',
+        'resources/js/script.js',
+      ],
+      refresh: true,
+    }),
+  ],
+})
