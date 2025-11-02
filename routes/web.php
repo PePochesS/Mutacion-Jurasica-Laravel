@@ -1,15 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    return view('pages.inicio');
-})->name('home');
+// Home
+Route::get('/', [GameController::class, 'index'])->name('home');
 
-Route::get('/juego', function () {
-    return view('pages.juego');
-})->name('juego');
+// Juego
+Route::get('/juego', [GameController::class, 'play'])->name('juego');
+Route::post('/juego/score', [GameController::class, 'submitScore'])->name('juego.score');
+Route::post('/juego/end', [GameController::class, 'endGame'])->name('juego.end');
 
-Route::get('/ranking', function () {
-    return view('pages.ranking');
-})->name('ranking');
+// Ranking
+Route::get('/ranking', [ScoreController::class, 'index'])->name('ranking');
+
+// Auth (modals)
+Route::post('/login',    [AuthController::class, 'login'])->name('login.post');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+Route::post('/logout',   [AuthController::class, 'logout'])->name('logout');

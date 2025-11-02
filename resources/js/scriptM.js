@@ -23,13 +23,10 @@ window.addEventListener('DOMContentLoaded', () => {
       const nowShowing = input.type === 'text';
       btn.classList.toggle('active', nowShowing);
       btn.setAttribute('aria-pressed', nowShowing ? 'true' : 'false');
-      // keep focus on the button for keyboard users
       try { btn.focus(); } catch (e) {}
     };
 
     btn.addEventListener('click', (e) => { e.preventDefault(); toggle(); });
-
-    // support Enter and Space
     btn.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
         e.preventDefault();
@@ -41,10 +38,11 @@ window.addEventListener('DOMContentLoaded', () => {
     btn.classList.toggle('active', input.type === 'text');
   }
 
+  // OJITOS (IDs de tu markup actual)
   initEyeToggle('toggle-registro-password', 'registro-password');
   initEyeToggle('toggle-registro-password-confirm', 'registro-password-confirm');
 
-  // If modal HTML is injected later or toggled, re-init when modal becomes visible
+  // Re-init si el modal cambia de display/clase
   const modal = document.getElementById('modal-auth');
   if (modal) {
     const obs = new MutationObserver(() => {
@@ -54,6 +52,15 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
     obs.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
+  }
+
+  // ABRIR AUTOMÁTICO SI HAY ERRORES DE LARAVEL (fallback sin Blade)
+  // Si hay .form-error visible en el DOM, abrimos el modal correspondiente
+  const anyError = document.querySelector('.form-error');
+  if (anyError && anyError.textContent.trim().length > 0) {
+    // heurística: si hay campo name/email en registro, mostramos registro; si no, login
+    const regName = document.getElementById('registro-usuario');
+    if (regName) abrirModalRegistro(); else abrirModalLogin();
   }
 });
 
@@ -89,66 +96,50 @@ document.addEventListener('click', function iniciarMusica() {
   document.removeEventListener('click', iniciarMusica);
 });
 
-// Modal de login / registro
+// === MODAL LOGIN/REGISTRO ===
+// Nota: tu CSS deja .modal-auth con display:flex SIEMPRE,
+// pero el HTML trae style="display:none". Por eso acá cambiamos el style inline:
 window.abrirModalLogin = function () {
-  document.getElementById('modal-auth').style.display = 'flex';
+  const modal = document.getElementById('modal-auth');
+  if (!modal) return;
+  modal.style.display = 'flex';
   mostrarLogin();
+  document.body.classList.add('modal-open'); // opcional: bloquear scroll
 };
 window.abrirModalRegistro = function () {
-  document.getElementById('modal-auth').style.display = 'flex';
+  const modal = document.getElementById('modal-auth');
+  if (!modal) return;
+  modal.style.display = 'flex';
   mostrarRegistro();
+  document.body.classList.add('modal-open');
 };
 window.cerrarModalAuth = function () {
-  document.getElementById('modal-auth').style.display = 'none';
+  const modal = document.getElementById('modal-auth');
+  if (!modal) return;
+  modal.style.display = 'none';
+  document.body.classList.remove('modal-open');
 };
 
 window.mostrarLogin = function () {
-  document.getElementById('login-form').style.display = 'block';
-  document.getElementById('registro-form').style.display = 'none';
+  const l = document.getElementById('login-form');
+  const r = document.getElementById('registro-form');
+  if (l) l.style.display = 'block';
+  if (r) r.style.display = 'none';
+  // foco al email de login (ID nuevo)
+  const i = document.getElementById('login-email');
+  if (i) setTimeout(()=>i.focus(), 50);
 };
 window.mostrarRegistro = function () {
-  document.getElementById('login-form').style.display = 'none';
-  document.getElementById('registro-form').style.display = 'block';
+  const l = document.getElementById('login-form');
+  const r = document.getElementById('registro-form');
+  if (l) l.style.display = 'none';
+  if (r) r.style.display = 'block';
+  const i = document.getElementById('registro-usuario') || document.getElementById('registro-email');
+  if (i) setTimeout(()=>i.focus(), 50);
 };
 
-// Lógica fake de login / registro (para testing)
-window.loginUsuario = function () {
-  const u = document.getElementById('login-usuario').value;
-  const p = document.getElementById('login-password').value;
-  console.log('Login:', u, p);
-  cerrarModalAuth();
-};
-window.registrarUsuario = function () {
-  const u = document.getElementById('registro-usuario').value;
-  const p = document.getElementById('registro-password').value;
-  const pc = document.getElementById('registro-password-confirm') ? document.getElementById('registro-password-confirm').value : null;
-  const err = document.getElementById('registro-error');
-  const email = document.getElementById('registro-email') ? document.getElementById('registro-email').value : '';
-
-  // Basic required fields validation
-  if (!email || !u || !p || !pc) {
-    if (err) err.textContent = 'Todos los campos son obligatorios.';
-    return;
-  }
-
-  // Basic email format check
-  const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-  if (!emailRe.test(email)) {
-    if (err) err.textContent = 'Por favor ingresa un correo electrónico válido.';
-    return;
-  }
-  if (pc === null) {
-    // campo de confirmación no presente; fallback a comportamiento previo
-    console.log('Registro:', u, p);
-    cerrarModalAuth();
-    return;
-  }
-  if (p !== pc) {
-    if (err) err.textContent = 'Las contraseñas no coinciden. Por favor, verifica.';
-    return; // no cerrar el modal ni guardar nada
-  }
-  if (err) err.textContent = '';
-  // passwords coinciden -> comportamiento de registro (fake)
-  console.log('Registro:', u, p);
-  cerrarModalAuth();
-};
+// === BORRAR/INUTILIZAR handlers FAKE ===
+// Ya NO usés estas funciones; ahora el <form> hace POST a Laravel.
+// Las dejo vacías por si quedaron en algún onclick residual (no deberían).
+window.loginUsuario = function () {};
+window.registrarUsuario = function () {};
