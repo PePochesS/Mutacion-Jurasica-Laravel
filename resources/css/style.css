@@ -1,0 +1,451 @@
+html, body {
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-width: 357px;
+  min-height: 576px;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  background: url('/public/images/menu-icons/Fondo.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  animation: pageFade 500ms ease-out;
+}
+
+@keyframes pageFade { from{opacity:0} to{opacity:1} }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.25);
+  z-index: 0;
+  pointer-events: none; 
+}
+
+:root {
+  --hero: #28d36a;
+  --hero-dark: #1ebc5c;
+}
+
+/* Contenedor principal */
+.container {
+  flex: 1 0 auto;
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100vw;
+  min-width: 357px;
+  min-height: 576px;
+}
+
+/* Título animado */
+.titulo {
+  max-width: 90vw;
+  width: 90vw;
+  min-width: 120px;
+  margin-top: 70px;
+  margin-bottom: 18px;
+  display: block;
+  animation: zoomTambaleo 3s ease-in-out infinite;
+  transform-origin: center;
+  filter: drop-shadow(0 0 5px #000);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+@keyframes zoomTambaleo {
+  0%{transform:scale(1) rotate(0deg)}
+  10%{transform:scale(1.05) rotate(0deg)}
+  20%{transform:scale(1) rotate(0deg)}
+  30%{transform:scale(1) rotate(-2deg)}
+  40%{transform:scale(1) rotate(2deg)}
+  50%{transform:scale(1) rotate(-2deg)}
+  60%{transform:scale(1) rotate(2deg)}
+  70%{transform:scale(1) rotate(-1deg)}
+  80%{transform:scale(1) rotate(1deg)}
+  100%{transform:scale(1) rotate(0deg)}
+}
+
+/* Menú central */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 2.5vw;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.boton-img {
+  width: 210px;
+  max-width: 60vw;
+  min-width: 120px;
+  margin: 14px 0;
+  transition: transform .3s, filter .3s;
+  cursor: pointer;
+  filter: drop-shadow(0 0 5px #000);
+}
+.boton-img:hover {
+  transform: scale(1.08);
+  filter: brightness(1.3) drop-shadow(0 0 12px #6aff9f);
+}
+
+/* Botonera superior */
+.auth-bar {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 1100;
+  display: flex;
+  flex-direction: row;
+  gap: 22px;
+  align-items: center;
+}
+.auth-btn {
+  background: linear-gradient(180deg, var(--hero), var(--hero-dark));
+  color: #0d1b12;
+  font-weight: 800;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(40,211,106,.25);
+  transition: transform .15s, filter .15s, box-shadow .15s;
+  filter: drop-shadow(0 0 6px #000a);
+}
+.auth-btn:hover,
+.auth-btn:focus {
+  transform: scale(1.07);
+  filter: brightness(1.12) drop-shadow(0 0 12px #6aff9f);
+  box-shadow: 0 8px 22px rgba(40,211,106,.35);
+}
+
+/* Modal auth */
+.modal-auth {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  min-width: 220px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 48px #000c;
+  background:
+    linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+    url('/public/images/menu-icons/pabntallaLogin.png') center center / cover no-repeat,
+    #1f1f1f;
+  animation: modalPop 220ms ease-out;
+  padding: 28px 20px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes modalPop{ from{transform:scale(.96);opacity:0} to{transform:scale(1);opacity:1} }
+.close {
+  position: absolute;
+  top: -20px;
+  left: 144px;
+  font-size: 28px;
+  color: #fff;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 0;
+  width: auto;
+  height: auto;
+  display: block;
+  line-height: 1;
+  z-index: 20;
+  transition: color 0.18s, transform 0.18s;
+  text-shadow: 0 2px 8px #000a;
+}
+.close:hover,
+.close:focus {
+  color: #e74c3c;
+  transform: scale(1.18);
+  outline: none;
+}
+
+/* Panel interior */
+.modal-panel {
+  width: 100%;
+  padding: 18px 10px 14px;
+  border-radius: 16px;
+  background: rgba(0,0,0,.55);
+  box-shadow: 0 10px 30px #0007, inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter: blur(3px);
+  color: #fff;
+}
+.modal-panel h2 {
+  margin: 0 0 10px 0;
+  font-weight: 800;
+  text-shadow: 0 2px 10px #0009;
+}
+
+/* Formulario */
+.modal-form { margin-top: 6px; }
+
+.modal-content input, .modal-content button {
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: none;
+}
+
+/* input-with-eye: place a small button inside the input area */
+.input-with-eye{ position: relative; }
+.input-with-eye input{ width:100%; padding-right:44px; /* space for eye */ box-sizing: border-box; }
+.input-with-eye .eye-toggle{
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  width: auto !important; /* override global .modal-content button rule */
+  margin: 0 !important;   /* override global margins */
+}
+.input-with-eye .eye-toggle svg{ width:18px; height:18px; display:block; }
+.input-with-eye .eye-toggle svg path,
+.input-with-eye .eye-toggle svg circle{ stroke:#fff; }
+.input-with-eye .eye-toggle svg .eye-closed{ display:none; }
+.input-with-eye .eye-toggle svg .eye-open{ display:block; }
+.input-with-eye .eye-toggle.active svg .eye-open{ display:none; }
+.input-with-eye .eye-toggle.active svg .eye-closed{ display:block; }
+.input-with-eye .eye-toggle.active svg path,
+.input-with-eye .eye-toggle.active svg circle{ stroke:#000; }
+.input-with-eye .eye-toggle:focus{ outline: none; }
+
+.btn-primary-hero {
+  background: linear-gradient(180deg, var(--hero), var(--hero-dark));
+  color: #0d1b12;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(40,211,106,.35);
+  cursor: pointer;
+  transition: transform .12s, filter .12s, box-shadow .12s;
+}
+.btn-primary-hero:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+  box-shadow: 0 8px 22px rgba(40,211,106,.45);
+}
+.form-error { color:#ff6b6b; }
+
+/* Footer (clickeable en desktop) */
+.site-footer {
+  position: static;
+  width: 100vw;
+  margin-top: 24px;
+  font-size: 13px;
+  padding: 8px 5px;
+  background: rgba(0,0,0,0.4);
+  color: #ddd;
+  text-align: center;
+  backdrop-filter: blur(2px);
+  pointer-events: auto;
+  z-index: 1200; 
+}
+.site-footer .social {
+  margin: 6px 0;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+.site-footer .social img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  transition: transform .2s, filter .2s;
+  filter: brightness(0.95);
+}
+.site-footer .social img:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+.site-footer a { color: #fff; text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+.site-footer .copyright { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+/* Móvil */
+@media (max-width: 700px) {
+  .titulo {
+    max-width: 60vw;
+    width: 60vw;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+  .boton-img {
+    max-width: 32vw;
+    width: 32vw;
+    min-width: 70px;
+    margin: 10px 0;
+  }
+  .auth-bar {
+    top: 16px;
+    right: 16px;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .auth-btn {
+    font-size: 0.9rem;
+    padding: 6px 14px;
+    min-width: auto;
+    max-width: none;
+  }
+  
+  .menu {
+    margin-top: 18px;
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 2vw;
+    flex-wrap: nowrap;
+  }
+  .site-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    z-index: 1200;
+  }
+}
+
+/* Intermedia: tablets y pantallas medianas */
+@media (min-width: 701px) and (max-width: 1199px) {
+  .container {
+    max-width: 98vw;
+    margin: 0 auto;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .titulo {
+    width: clamp(240px, 60vw, 700px);
+    max-width: 90vw;
+    margin-top: 40px;
+    margin-bottom: 24px;
+  }
+  .menu {
+    margin-top: 18px;
+    gap: 3vw;
+    flex-wrap: wrap;
+  }
+  .boton-img {
+    width: clamp(100px, 18vw, 210px);
+    max-width: 40vw;
+    min-width: 100px;
+    margin: 14px 0;
+  }
+  .site-footer {
+    position: static;
+    width: 100vw;
+    margin: 0;
+    z-index: 1200;
+  }
+}
+
+/* Escritorio grande */
+@media (min-width: 1200px) {
+  .container {
+    max-width: min(1100px, 92vw);
+    margin: 0 auto;
+    padding-top: clamp(8px, 2vh, 24px);
+    padding-bottom: clamp(8px, 2vh, 24px);
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .titulo {
+    width: clamp(360px, 32vw, 700px);
+    max-width: none;
+    margin-top: clamp(10px, 6vh, 40px);
+    margin-bottom: clamp(12px, 3vh, 24px);
+  }
+  .menu {
+    margin-top: clamp(8px, 2vh, 24px);
+    gap: clamp(20px, 3vw, 56px);
+    flex-wrap: wrap;
+  }
+  .boton-img {
+    width: clamp(140px, 12vw, 240px);
+    max-width: none;
+    min-width: 120px;
+    margin: 14px 0;
+  }
+  .site-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    margin: 0;
+    z-index: 1200; /* asegura clics */
+  }
+  /* Permitir scroll vertical en escritorio */
+  html, body { overflow-y: auto; }
+}
+
+/* Password eye: ensure fixed button size and no layout shift (small, safe override) */
+.input-with-eye input { padding-right: 44px; box-sizing: border-box; }
+.input-with-eye .eye-toggle { width: 32px; height: 32px; padding: 6px; border-radius: 6px; }
+.input-with-eye .eye-toggle svg { width: 18px; height: 18px; display: block; }
+
+/* click-box indicator: visible by default, with subtle shadow to contrast on dark modal */
+.input-with-eye .eye-toggle svg .click-box {
+  display: block;
+  stroke: #fff;
+  fill: rgba(255,255,255,0.03);
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+
+/* eye-open visible by default, eye-closed hidden until active */
+.input-with-eye .eye-toggle svg .eye-open { display: block; }
+.input-with-eye .eye-toggle svg .eye-closed { display: none; }
+
+/* When active: hide click-box and eye-open, show eye-closed */
+.input-with-eye .eye-toggle.active svg .click-box { display: none; }
+.input-with-eye .eye-toggle.active svg .eye-open { display: none; }
+.input-with-eye .eye-toggle.active svg .eye-closed { display: block; }
+
+.input-with-eye .eye-toggle:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,255,255,0.08); border-radius: 6px; }
+
+/* Stroke colors: open and click-box in white; closed eye will be slightly darker for contrast when shown */
+.input-with-eye .eye-toggle svg path,
+.input-with-eye .eye-toggle svg circle { stroke: #fff; }
+
+/* make the eye-open borders black for better contrast as requested */
+.input-with-eye .eye-toggle svg .eye-open path,
+.input-with-eye .eye-toggle svg .eye-open circle { stroke: #000; }
+.input-with-eye .eye-toggle.active svg path,
+.input-with-eye .eye-toggle.active svg circle { stroke: #000; }
