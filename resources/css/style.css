@@ -449,3 +449,65 @@ body::before {
 .input-with-eye .eye-toggle svg .eye-open circle { stroke: #000; }
 .input-with-eye .eye-toggle.active svg path,
 .input-with-eye .eye-toggle.active svg circle { stroke: #000; }
+
+
+/* Banner superior de sesión */
+.session-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  backdrop-filter: blur(6px);
+  z-index: 1200;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Botón de cerrar sesión dentro del banner */
+.logout-btn {
+  background: linear-gradient(180deg, var(--hero), var(--hero-dark));
+  color: #0d1b12;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(40,211,106,0.25);
+  transition: transform 0.15s, filter 0.15s;
+}
+.logout-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+
+/* Toast flotante que aparece y desaparece */
+.toast-status {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%) translateY(40px);
+  background: rgba(11, 17, 10, 0.75);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  animation: toastFade 4s ease-in-out forwards;
+  z-index: 1500;
+}
+@keyframes toastFade {
+  0% { opacity: 0; transform: translateX(-50%) translateY(40px); }
+  10%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(40px); }
+}

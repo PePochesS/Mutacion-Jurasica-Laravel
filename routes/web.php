@@ -9,9 +9,22 @@ use App\Http\Controllers\AuthController;
 Route::get('/', [GameController::class, 'index'])->name('home');
 
 // Juego
-Route::get('/juego', [GameController::class, 'play'])->name('juego');
-Route::post('/juego/score', [GameController::class, 'submitScore'])->name('juego.score');
-Route::post('/juego/end', [GameController::class, 'endGame'])->name('juego.end');
+Route::post('/juego/start', [GameController::class, 'start'])
+    ->middleware('auth')
+    ->name('juego.start');
+
+Route::get('/juego', [GameController::class, 'play'])
+    ->middleware('auth')
+    ->name('juego');
+
+Route::post('/juego/score', [GameController::class, 'submitScore'])
+    ->middleware('auth')
+    ->name('juego.score');
+
+// FINALIZAR PARTIDA -> ahora va a ScoreController@end
+Route::post('/juego/end', [ScoreController::class, 'end'])
+    ->middleware('auth')
+    ->name('juego.end');
 
 // Ranking
 Route::get('/ranking', [ScoreController::class, 'index'])->name('ranking');

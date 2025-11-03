@@ -25,7 +25,8 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('juego')->with('status', 'Registro exitoso, ¡a jugar!');
+        return redirect()->route('home')
+        ->with('status', "Registro exitoso. Sesión iniciada como {$user->name}");
     }
 
     public function login(Request $request)
@@ -37,12 +38,14 @@ class AuthController extends Controller
 
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => __('Estas credenciales no coinciden con nuestros registros.'),
+                'email' => __('Los datos no coinciden con nuestros registros.'),
             ]);
         }
 
-        $request->session()->regenerate();
-        return redirect()->intended(route('juego'));
+      $request->session()->regenerate();
+      return redirect()->route('home')
+      ->with('status', 'Sesión iniciada correctamente');
+
     }
 
     public function logout(Request $request)

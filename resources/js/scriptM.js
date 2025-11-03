@@ -138,6 +138,35 @@ window.mostrarRegistro = function () {
   if (i) setTimeout(()=>i.focus(), 50);
 };
 
+
+// === MODAL "¿CUÁNTOS JUGADORES?" ===
+window.abrirModalJugadores = function () {
+  const m = document.getElementById('modal-players');
+  if (!m) {
+    console.warn('No se encontró #modal-players en el DOM');
+    alert('No se encontró el modal de jugadores. Verifica el HTML.');
+    return;
+  }
+  m.style.display = 'flex';           // mostrar modal
+  document.body.classList.add('modal-open');
+};
+
+window.cerrarModalJugadores = function () {
+  const m = document.getElementById('modal-players');
+  if (!m) return;
+  m.style.display = 'none';           // ocultar modal
+  document.body.classList.remove('modal-open');
+};
+
+// opcional: cerrar con ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const m = document.getElementById('modal-players');
+    if (m && getComputedStyle(m).display !== 'none') cerrarModalJugadores();
+  }
+});
+
+
 // === BORRAR/INUTILIZAR handlers FAKE ===
 // Ya NO usés estas funciones; ahora el <form> hace POST a Laravel.
 // Las dejo vacías por si quedaron en algún onclick residual (no deberían).

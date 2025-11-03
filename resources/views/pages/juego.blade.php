@@ -7,6 +7,29 @@
 
 @section('content')
 
+<div class="game-header">
+  <div id="turno-label" class="gh-title">
+    Partida #{{ $gameId }} — Jugadores: {{ $playerCount }} — Turno del Jugador {{ $turn }}
+  </div>
+
+  <div class="gh-actions">
+    <button type="button" class="btn btn-sm btn-outline-light" onclick="siguienteTurno()">
+      Siguiente turno
+    </button>
+
+    <form id="end-game-form" method="POST" action="{{ route('juego.end') }}">
+      @csrf
+      <input type="hidden" name="game_id" value="{{ $gameId }}">
+      <input type="hidden" name="scores_json" id="scores_json">
+      <button type="button" class="btn btn-sm btn-danger" onclick="finalizarPartida()">
+        Finalizar partida
+      </button>
+    </form>
+  </div>
+</div>
+
+{{-- CONTENEDOR PRINCIPAL (mantiene tus tres columnas originales) --}}
+<div class="game-row">
   <div class="panel-dinosaurios">
     <h2>Dinosaurios</h2>
     <img src="{{ asset('images/game-assets/Dinosaurio 1.png') }}" alt="dinosaurio 1" draggable="true">
@@ -18,77 +41,32 @@
   </div>
 
   <div class="zona-juego">
-    <div class="recinto" id="recinto1">
-      <h3>Recinto 1</h3>
-      <div class="dropzone"></div>
-      <div class="acciones">
-        <button type="button" onclick="limpiarRecinto('recinto1')" class="btn btn-danger btn-sm">Limpiar Recinto</button>
+    @for ($i = 1; $i <= 7; $i++)
+      <div class="recinto" id="recinto{{ $i }}">
+        <h3>Recinto {{ $i }}</h3>
+        <div class="dropzone"></div>
+        <div class="acciones">
+          <button type="button" onclick="limpiarRecinto('recinto{{ $i }}')" class="btn btn-danger btn-sm">Limpiar Recinto</button>
+        </div>
+        <div class="puntaje-recinto"><span>Puntos: <span id="puntos-recinto{{ $i }}">0</span></span></div>
       </div>
-      <div class="puntaje-recinto"><span>Puntos: <span id="puntos-recinto1">0</span></span></div>
-    </div>
-
-    <div class="recinto" id="recinto2">
-      <h3>Recinto 2</h3>
-      <div class="dropzone"></div>
-      <div class="acciones">
-        <button type="button" onclick="limpiarRecinto('recinto2')" class="btn btn-danger btn-sm">Limpiar Recinto</button>
-      </div>
-      <div class="puntaje-recinto"><span>Puntos: <span id="puntos-recinto2">0</span></span></div>
-    </div>
-
-    <div class="recinto" id="recinto3">
-      <h3>Recinto 3</h3>
-      <div class="dropzone"></div>
-      <div class="acciones">
-        <button type="button" onclick="limpiarRecinto('recinto3')" class="btn btn-danger btn-sm">Limpiar Recinto</button>
-      </div>
-      <div class="puntaje-recinto"><span>Puntos: <span id="puntos-recinto3">0</span></span></div>
-    </div>
-
-    <div class="recinto" id="recinto4">
-      <h3>Recinto 4</h3>
-      <div class="dropzone"></div>
-      <div class="acciones">
-        <button type="button" onclick="limpiarRecinto('recinto4')" class="btn btn-danger btn-sm">Limpiar Recinto</button>
-      </div>
-      <div class="puntaje-recinto"><span>Puntos: <span id="puntos-recinto4">0</span></span></div>
-    </div>
-
-    <div class="recinto" id="recinto5">
-      <h3>Recinto 5</h3>
-      <div class="dropzone"></div>
-      <div class="acciones">
-        <button type="button" onclick="limpiarRecinto('recinto5')" class="btn btn-danger btn-sm">Limpiar Recinto</button>
-      </div>
-      <div class="puntaje-recinto"><span>Puntos: <span id="puntos-recinto5">0</span></span></div>
-    </div>
-
-    <div class="recinto" id="recinto6">
-      <h3>Recinto 6</h3>
-      <div class="dropzone"></div>
-      <div class="acciones">
-        <button type="button" onclick="limpiarRecinto('recinto6')" class="btn btn-danger btn-sm">Limpiar Recinto</button>
-      </div>
-      <div class="puntaje-recinto"><span>Puntos: <span id="puntos-recinto6">0</span></span></div>
-    </div>
-
-    <div class="recinto" id="recinto7">
-      <h3>Recinto 7</h3>
-      <div class="dropzone"></div>
-      <div class="acciones">
-        <button type="button" onclick="limpiarRecinto('recinto7')" class="btn btn-danger btn-sm">Limpiar Recinto</button>
-      </div>
-      <div class="puntaje-recinto"><span>Puntos: <span id="puntos-recinto7">0</span></span></div>
-    </div>
+    @endfor
   </div>
 
   <div class="puntaje">
     <span class="fw-bold">Puntaje Total</span>
     <p id="puntos">0</p>
   </div>
+</div>
 
-  <div id="especificaciones-recintos" style="display:none; margin:32px 0 0 0;"></div>
+{{-- Botones inferiores --}}
+<a href="{{ route('home') }}" class="btn-volver btn btn-warning">Volver</a>
 
-  <a href="{{ route('ranking') }}" class="btn-ranking btn btn-warning">Ver Ranking</a>
-  <a href="{{ route('home') }}" class="btn-volver btn btn-warning">Volver</a>
+{{-- Variables para script.js --}}
+<script>
+  window.playerCount  = {{ (int) $playerCount }};
+  window.currentTurn  = {{ (int) $turn }};
+  window.gameIdFront  = {{ (int) $gameId }};
+</script>
+
 @endsection

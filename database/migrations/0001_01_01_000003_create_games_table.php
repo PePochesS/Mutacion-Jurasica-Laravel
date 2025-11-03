@@ -13,8 +13,19 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('players');
+
+            // Usuario que creó la partida
+            $table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
+
+            // Nombre opcional
+            $table->string('name')->nullable();
+
+            // Cantidad de jugadores
+            $table->unsignedTinyInteger('player_count')->default(1);
+
+            // Estado de la partida
+            $table->enum('status', ['active', 'finished'])->default('active');
+
             $table->timestamps();
         });
     }
