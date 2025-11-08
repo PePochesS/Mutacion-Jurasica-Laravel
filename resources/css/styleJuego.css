@@ -1,20 +1,30 @@
-/* Evitar scroll global (la franja gris) */
+/*  BASE */
 html, body {
   height: 100%;
-  overflow: hidden;
+  overflow: hidden; /* Evitar scroll global (franja gris) */
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #222;
+
+  /* Fondo */
+  background-image:
+    linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+    url(/public/images/game-assets/fondoJuego.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;
+
   color: #fff;
   display: flex;
   flex-direction: row;
   height: 100vh;
 }
 
+/*PANEL IZQUIERDO (DINOSAURIOS)*/
 .panel-dinosaurios {
   width: 220px;
   background-color: #111;
@@ -39,6 +49,7 @@ body {
   outline: 2px dashed #7ed957;
 }
 
+/*ZONA DE JUEGO*/
 .zona-juego {
   flex: 1;
   padding: 20px;
@@ -90,6 +101,14 @@ body {
   padding: 0;
 }
 
+.dropzone img {
+  height: 44px;
+  max-width: 44px;
+  object-fit: contain;
+  cursor: pointer;
+  margin: 0;
+}
+
 .recinto button {
   margin-top: 6px;
   font-size: 12px;
@@ -103,26 +122,20 @@ body {
   align-self: center;
 }
 
-.dropzone img {
-  height: 44px;
-  max-width: 44px;
-  object-fit: contain;
-  cursor: pointer;
-  margin: 0;
-}
-
+/* PANEL DERECHO (PUNTAJE) */
 .puntaje {
   width: 220px;
   padding: 20px;
   background-color: #111;
   border-left: 2px solid #444;
-  overflow-y: auto; /* <-- agrega scroll propio */
+  overflow-y: auto;
 }
 
 .puntaje h2 {
   font-size: 18px;
 }
 
+/* BOTONES FIJOS */
 .btn-volver {
   position: fixed;
   bottom: 24px;
@@ -166,169 +179,7 @@ body {
   background: #c13c00;
 }
 
-@media (max-width: 700px) {
-  body {
-    flex-direction: column;
-    height: 100vh;
-    overflow-x: hidden;
-    min-width: 0;
-    min-height: 0;
-  }
-  .panel-dinosaurios {
-    width: 100vw;
-    min-width: 0;
-    max-width: 100vw;
-    height: auto;
-    border-right: none;
-    border-bottom: 2px solid #444;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 14px 0 14px 8px;
-    gap: 12px;
-    background: #111;
-    scrollbar-width: thin;
-    scrollbar-color: #7ed957 #222;
-  }
-  .panel-dinosaurios img {
-    width: 56px;
-    min-width: 56px;
-    height: 56px;
-    margin: 0 8px 0 0;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px #0004;
-    background: #fff;
-    touch-action: pan-x;
-    transition: transform .2s, filter .2s;
-  }
-  .panel-dinosaurios img:active {
-    transform: scale(1.08);
-    filter: brightness(1.2);
-  }
-  .panel-dinosaurios::-webkit-scrollbar {
-    height: 8px;
-    background: #222;
-  }
-  .panel-dinosaurios::-webkit-scrollbar-thumb {
-    background: #7ed957;
-    border-radius: 4px;
-  }
-  .zona-juego {
-    flex: unset;
-    width: 100vw;
-    padding: 10px 0 0 0;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: flex-start;
-    overflow-y: auto;
-    padding-bottom: 150px !important;
-    min-width: 0;
-    min-height: 0;
-  }
-  .recinto {
-    width: 44vw;
-    min-width: 120px;
-    max-width: 150px;
-    min-height: 70px;
-    margin: 0 2vw 10px 2vw;
-    padding: 6px 2px 10px 2px;
-    font-size: 0.97rem;
-    box-shadow: 0 2px 8px #0006;
-    border-radius: 12px;
-    background: rgba(30,30,30,0.85);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  .recinto h3 {
-    font-size: 1rem;
-    margin-bottom: 4px;
-    width: 100%;
-    text-align: center;
-    background: rgba(0,0,0,0.5);
-    border-radius: 4px;
-    padding: 2px 0;
-  }
-  .dropzone {
-    min-height: 32px;
-    min-width: 40px;
-    gap: 4px;
-    width: 100%;
-    justify-content: center;
-    align-items: flex-start;
-    display: flex;
-    flex-wrap: wrap;
-    background: none;
-    padding: 0;
-  }
-  .dropzone img {
-    height: 28px;
-    max-width: 28px;
-    border-radius: 6px;
-    margin: 2px;
-    box-shadow: 0 1px 4px #0003;
-    background: #fff;
-  }
-  .puntaje {
-    position: fixed;
-    left: 8px;
-    bottom: 56px;
-    width: auto;
-    min-width: 90px;
-    max-width: 60vw;
-    padding: 10px 12px;
-    background: #111;
-    border-left: none;
-    border-top: 2px solid #444;
-    border-radius: 10px;
-    z-index: 1100;
-    box-shadow: 0 2px 8px #0006;
-  }
-  .puntaje span {
-    font-size: 1rem;
-    margin-bottom: 2px;
-    display: block;
-  }
-  .puntaje p {
-    font-size: 1.2rem;
-    margin: 0;
-    font-weight: bold;
-    color: #7ed957;
-  }
-  .btn-ranking {
-    position: fixed;
-    left: 8px;
-    bottom: 8px;
-    right: auto;
-    width: auto;
-    font-size: 1rem;
-    padding: 8px 14px;
-    border-radius: 10px;
-    margin: 0;
-    z-index: 1101;
-    box-shadow: 0 2px 8px #0006;
-  }
-  .btn-volver {
-    position: fixed;
-    left: 140px;
-    bottom: 8px;
-    right: auto;
-    width: auto;
-    font-size: 1rem;
-    padding: 8px 14px;
-    border-radius: 10px;
-    margin: 0;
-    z-index: 1101;
-    box-shadow: 0 2px 8px #0006;
-  }
-}
-
-/* ===== CABECERA SUTIL ===== */
+/* CABECERA DEL JUEGO */
 .game-header {
   position: fixed;
   top: 0;
@@ -368,16 +219,262 @@ body {
   border-radius: 6px;
 }
 
-/* Filas de juego: altura exacta y sin “empujes” */
+/* Altura útil con cabecera fija */
 .game-row {
   display: flex;
   flex-direction: row;
   height: calc(100vh - 42px);
-  margin-top: 42px; /* espacio para la cabecera */
-  overflow: hidden; /* evita scroll fantasma dentro del contenedor */
+  margin-top: 42px;
+  overflow: hidden;
 }
 
-/* Robustez en móviles con 100dvh (iOS/Android barras dinámicas) */
 @supports (height: 100dvh) {
-  .game-row { height: calc(100dvh - 42px); }
+  .game-row {
+    height: calc(100dvh - 42px);
+  }
 }
+
+/* DADO */
+.dice-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 10px;
+}
+
+.die-face {
+  min-width: 88px;
+  padding: 6px 10px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.24);
+  border-radius: 8px;
+  background: rgba(0,0,0,0.3);
+  font-weight: 700;
+  user-select: none;
+  transition: transform .12s ease;
+}
+
+/*  BLOQUE ÚNICO RESPONSIVE  */
+@media (max-width: 576.98px) {
+  html, body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
+  body { display: block !important; }
+
+  .game-row {
+    display: block !important;
+    height: auto !important;
+    margin-top: 0 !important;
+    overflow: visible !important;
+  }
+
+  .game-header {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 8px 12px !important;
+    white-space: normal !important;
+    overflow: visible !important;
+  }
+
+  .gh-title { white-space: normal !important; }
+  .gh-actions { flex-wrap: wrap !important; gap: 8px !important; }
+
+  .panel-dinosaurios, .zona-juego, .puntaje {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    display: block !important;
+    position: static !important;
+    float: none !important;
+    clear: both !important;
+  }
+
+  .panel-dinosaurios {
+    border-right: none !important;
+    border-bottom: 2px solid #444 !important;
+    padding: 12px 8px !important;
+    background: #111;
+  }
+  .panel-dinosaurios h2 { text-align: center; font-size: 18px; margin: 0 0 8px 0; }
+  .panel-dinosaurios img {
+    width: 84px !important; height: 84px !important; max-width: 84px !important;
+    object-fit: contain; background: #fff; border-radius: 10px;
+    margin: 6px 8px 6px 0 !important; display: inline-block !important; cursor: grab;
+    box-shadow: 0 2px 8px #0004;
+  }
+
+  .zona-juego {
+    padding: 12px 8px !important;
+    display: flex !important; flex-wrap: wrap !important;
+    gap: 12px !important; justify-content: center !important; align-items: flex-start !important;
+    overflow: visible !important;
+  }
+  .recinto {
+    width: calc(50% - 12px) !important;
+    min-width: 140px !important; max-width: 220px !important;
+    min-height: 90px !important; border-radius: 12px !important;
+    padding: 8px 6px 12px 6px !important; margin: 4px !important;
+    background: rgba(30,30,30,0.85) !important; box-shadow: 0 2px 8px #0006 !important;
+  }
+  .recinto h3 {
+    font-size: .95rem !important; margin: 4px 0 6px 0 !important;
+    width: 100% !important; text-align: center !important;
+    background: rgba(0,0,0,0.5) !important; border-radius: 4px !important; padding: 2px 0 !important;
+  }
+  .dropzone { min-height: 40px !important; gap: 6px !important; justify-content: center !important; align-items: flex-start !important; }
+  .dropzone img { height: 30px !important; max-width: 30px !important; border-radius: 6px; background:#fff; }
+  .recinto button { width: 92% !important; font-size: .85rem !important; padding: 6px 8px !important; margin-top: 6px !important; }
+
+  .puntaje {
+    border-left: none !important;
+    border-top: 2px solid #444 !important;
+    padding: 12px !important;
+    box-shadow: none !important; overflow: visible !important;
+  }
+  .puntaje h2 { font-size: 1rem !important; margin: 0 0 8px 0 !important; }
+
+  .btn-ranking, .btn-volver {
+    position: static !important;
+    display: inline-block !important;
+    margin: 12px 8px 0 8px !important;
+    width: auto !important;
+    visibility: visible !important; opacity: 1 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25) !important;
+  }
+}
+
+/* MD: 577–992px (tablet) */
+@media (min-width: 577px) and (max-width: 992.98px) {
+  html, body { overflow-x: hidden; }
+  .game-row { height: auto; margin-top: 42px; }
+  .zona-juego { gap: 16px; }
+  .recinto { width: calc(33.333% - 16px); min-width: 220px; max-width: 320px; }
+  .dropzone img { height: 36px; max-width: 36px; }
+}
+
+/* AJUSTES FINALES VISTA CELULAR */
+@media (max-width: 576.98px) {
+  .game-header { flex-wrap: wrap; justify-content: center; gap: 6px; text-align: center; padding: 10px 6px !important; }
+  .gh-actions { flex-wrap: wrap; justify-content: center; gap: 4px; }
+  .gh-actions .btn { font-size: 0.75rem !important; padding: 5px 8px !important; flex: 1 1 auto; }
+
+  .panel-dinosaurios { text-align: center; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px 0 !important; }
+  .panel-dinosaurios h2 { flex-basis: 100%; margin-bottom: 6px; }
+  .panel-dinosaurios img { width: 72px !important; height: 72px !important; margin: 4px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,.4); background: #fff; }
+
+  .zona-juego { padding: 8px !important; gap: 10px !important; justify-content: center !important; }
+  .recinto {
+    width: calc(50% - 12px) !important; min-width: 140px !important; max-width: 220px !important;
+    border-radius: 12px !important; background: rgba(30, 30, 30, 0.85) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.5); padding: 6px 4px 10px !important;
+  }
+  .recinto h3 { font-size: 0.9rem !important; margin-bottom: 6px !important; }
+  .dropzone { min-height: 40px !important; gap: 4px !important; }
+  .dropzone img { height: 28px !important; max-width: 28px !important; }
+  .recinto button { font-size: 0.8rem !important; padding: 5px 6px !important; margin-top: 6px !important; }
+
+  .puntaje { border-top: 2px solid #444 !important; border-left: none !important; margin-top: 12px; padding: 14px !important; text-align: center; }
+  .puntaje h2 { font-size: 1rem !important; margin-bottom: 4px; }
+
+  .btn-ranking, .btn-volver { position: static !important; display: inline-block !important; width: auto !important; font-size: 1rem !important; margin: 10px 6px 4px 6px !important; }
+  .btn-volver { display: block !important; margin: 16px auto !important; text-align: center; }
+}
+
+@media (max-width: 576.98px) {
+  .game-header { flex-wrap: wrap; justify-content: center; gap: 6px; padding: 10px 8px !important; text-align: center; }
+  .gh-actions { flex-wrap: wrap; justify-content: center; gap: 6px; }
+  .gh-actions .btn { font-size: 0.8rem !important; padding: 6px 10px !important; border-radius: 8px; }
+
+  .panel-dinosaurios { display: grid; grid-template-columns: repeat(3, 1fr); justify-items: center; gap: 10px; border-bottom: 2px solid #444; padding: 10px 0; }
+  .panel-dinosaurios h2 { grid-column: 1 / -1; margin-bottom: 8px; }
+  .panel-dinosaurios img { width: 70px !important; height: 70px !important; background: #fff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,.4); cursor: grab; }
+
+  .zona-juego { display: grid !important; grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 12px; justify-items: center; }
+  .recinto {
+    width: 100%; max-width: 160px; min-height: 100px; border-radius: 14px;
+    background: linear-gradient(180deg, rgba(35,35,35,.9), rgba(15,15,15,.9));
+    box-shadow: 0 4px 8px rgba(0,0,0,.5); padding: 8px 4px 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  }
+  .recinto h3 {
+    font-size: 0.9rem; text-align: center; margin: 4px 0 6px 0;
+    width: 90%; background: rgba(0,0,0,.6); border-radius: 4px; padding: 2px 0;
+  }
+  .dropzone { min-height: 42px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+  .dropzone img { height: 28px; width: 28px; border-radius: 6px; background: #fff; }
+  .recinto button { background-color: #b24000; font-size: 0.85rem; padding: 5px 8px; border-radius: 6px; margin-top: 6px; }
+
+  .zona-juego > .recinto:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; }
+
+  .puntaje {
+    margin-top: 14px; border-top: 2px solid #444; background: #111; border-radius: 12px;
+    padding: 14px 12px; text-align: center; box-shadow: 0 3px 8px rgba(0,0,0,.4);
+  }
+  .puntaje h2 { font-size: 1rem; margin-bottom: 6px; letter-spacing: 0.5px; }
+  .puntaje span { display: inline-block; font-size: 0.95rem; }
+  .puntaje #puntos { display: block; font-size: 1.5rem; font-weight: bold; color: #7ed957; margin-top: 4px; }
+
+  .btn-volver { position: static !important; display: block !important; width: auto !important; margin: 16px auto !important; font-size: 1rem; text-align: center; padding: 10px 24px; border-radius: 10px; }
+  .btn-ranking { display: none !important; }
+}
+
+/* Selección de dino en móvil */
+@media (max-width: 576.98px) {
+  .panel-dinosaurios img.selected {
+    outline: 2px solid #7ed957;
+    box-shadow: 0 0 0 3px rgba(126,217,87,.25);
+  }
+}
+
+/* MODAL Reglas*/
+#rules-modal {
+  position: fixed;
+  inset: 0;
+  display: none;            
+  place-items: center;
+  background: rgba(8,12,20,0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 10000;
+}
+
+
+#rules-modal:target {
+  display: grid;
+}
+
+/* Tarjeta centrada */
+#rules-modal .rules-card {
+  position: relative;
+  width: min(540px, 92vw);
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  border-radius: 16px;
+  padding: 20px 18px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(24,30,45,0.96), rgba(16,20,32,0.96));
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  color: #fff;
+}
+
+/* Botón cerrar */
+#rules-modal .rules-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+#rules-modal .rules-close:hover { background: rgba(255,255,255,0.1); }

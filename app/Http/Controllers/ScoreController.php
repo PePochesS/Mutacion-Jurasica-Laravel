@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class ScoreController extends Controller
 {
-    /**
-     * GET /ranking
-     * - Si viene ?game=ID, muestra el ranking de esa partida (tarjetas por jugador, ordenadas).
-     * - Si no viene, lista partidas finalizadas con filtro por cantidad de jugadores (?players=1..4).
-     */
     public function index(Request $request)
     {
         $gameId = $request->query('game', session('game'));
@@ -21,13 +16,15 @@ class ScoreController extends Controller
             $game = DB::table('games')->where('id', $gameId)->first();
 
             if (!$game) {
-                return view('pages.ranking', [
+                // Renderiza la vista correspondiente al idioma actual
+                $view = $this->isEn($request) ? 'pages.rankingEN' : 'pages.ranking';
+                return view($view, [
                     'game'          => null,
                     'scores'        => collect(),
                     'winner'        => null,
                     'games'         => [],
                     'playersFilter' => null,
-                ])->with('status', 'Partida no encontrada.');
+                ])->with('status', $this->isEn($request) ? 'Game not found.' : 'Partida no encontrada.');
             }
 
             $scores = DB::table('scores')
@@ -37,7 +34,8 @@ class ScoreController extends Controller
 
             $winner = $scores->first();
 
-            return view('pages.ranking', [
+            $view = $this->isEn($request) ? 'pages.rankingEN' : 'pages.ranking';
+            return view($view, [
                 'game'          => $game,
                 'scores'        => $scores,
                 'winner'        => $winner,
@@ -46,8 +44,8 @@ class ScoreController extends Controller
             ]);
         }
 
-        // Listado de partidas finalizadas (+ filtro ?players=1..4)
-        $players = $request->query('players'); // 1..4
+        // Listado
+        $players = $request->query('players');
         $games = DB::table('games')
             ->when($players, fn ($q) => $q->where('player_count', (int) $players))
             ->where('status', 'finished')
@@ -55,7 +53,8 @@ class ScoreController extends Controller
             ->limit(30)
             ->get();
 
-        return view('pages.ranking', [
+        $view = $this->isEn($request) ? 'pages.rankingEN' : 'pages.ranking';
+        return view($view, [
             'game'          => null,
             'scores'        => collect(),
             'winner'        => null,
@@ -64,13 +63,6 @@ class ScoreController extends Controller
         ]);
     }
 
-    /**
-     * POST /juego/end  (route: juego.end)
-     * Recibe:
-     * - game_id
-     * - scores_json: JSON de [{player_number, points}, ...]
-     * Guarda puntajes, marca la partida como finished y redirige a /ranking?game=ID.
-     */
     public function end(Request $request)
     {
         $data = $request->validate([
@@ -83,7 +75,7 @@ class ScoreController extends Controller
             return back()->withErrors(['scores_json' => 'Formato de puntajes inválido.']);
         }
 
-        // Calcular cantidad de jugadores desde el payload
+        // calcular cantidad de jugadores
         $playerCount = 0;
         foreach ($scores as $s) {
             $pn = (int)($s['player_number'] ?? 0);
@@ -92,26 +84,22 @@ class ScoreController extends Controller
         if ($playerCount <= 0) $playerCount = count($scores);
 
         DB::transaction(function () use ($data, $scores, $playerCount) {
-            // Actualizar partida como finalizada
             DB::table('games')->where('id', $data['game_id'])->update([
                 'player_count' => $playerCount,
                 'status'       => 'finished',
                 'updated_at'   => now(),
             ]);
 
-            // Evitar duplicados si se re-envía
             DB::table('scores')->where('game_id', $data['game_id'])->delete();
 
             $now = now();
-            $authId = Auth::id(); // puede ser null si no hay usuario logueado
+            $authId = Auth::id();
 
             foreach ($scores as $s) {
                 DB::table('scores')->insert([
-                    // IMPORTANTE: si tu columna user_id NO es nullable, hacela nullable en la migración,
-                    // o asegurate de tener un usuario logueado.
-                    'user_id'       => $authId, // null si anónimo
+                    'user_id'       => $authId,
                     'game_id'       => (int)$data['game_id'],
-                    'player_number' => (int)($s['player_number'] ?? $s['player'] ?? 0),
+                    'player_number' => (int)($s['player_number'] ?? 0),
                     'points'        => (int)($s['points'] ?? 0),
                     'created_at'    => $now,
                     'updated_at'    => $now,
@@ -119,8 +107,19 @@ class ScoreController extends Controller
             }
         });
 
+        $route = $this->isEn($request) ? 'en.ranking' : 'ranking';
+
         return redirect()
-            ->route('ranking', ['game' => $data['game_id']])
-            ->with('status', 'Partida finalizada correctamente.');
+            ->route($route, ['game' => $data['game_id']])
+            ->with('status', $this->isEn($request)
+                ? 'Game finished successfully.'
+                : 'Partida finalizada correctamente.');
+    }
+
+    private function isEn(Request $request): bool
+    {
+        // respeta el hidden del formulario y también la URL /en/...
+        return $request->input('_lang') === 'en'
+            || str_starts_with(trim($request->path(), '/'), 'en');
     }
 }

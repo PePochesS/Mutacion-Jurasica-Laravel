@@ -1,15 +1,12 @@
-// Initialize small behaviors and accessible eye toggles
 window.addEventListener('DOMContentLoaded', () => {
   const musica = document.getElementById('background-music');
   if (musica) musica.volume = 0.2;
 
-  // tiny helper to initialize an eye toggle for an input
   function initEyeToggle(toggleId, inputId) {
     const btn = document.getElementById(toggleId);
     const input = document.getElementById(inputId);
     if (!btn || !input) return;
 
-    // idempotent guard
     if (btn.__eyeInit) return;
     btn.__eyeInit = true;
 
@@ -34,15 +31,12 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // ensure visual state matches input on init
     btn.classList.toggle('active', input.type === 'text');
   }
 
-  // OJITOS (IDs de tu markup actual)
   initEyeToggle('toggle-registro-password', 'registro-password');
   initEyeToggle('toggle-registro-password-confirm', 'registro-password-confirm');
 
-  // Re-init si el modal cambia de display/clase
   const modal = document.getElementById('modal-auth');
   if (modal) {
     const obs = new MutationObserver(() => {
@@ -54,11 +48,8 @@ window.addEventListener('DOMContentLoaded', () => {
     obs.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
   }
 
-  // ABRIR AUTOMÁTICO SI HAY ERRORES DE LARAVEL (fallback sin Blade)
-  // Si hay .form-error visible en el DOM, abrimos el modal correspondiente
   const anyError = document.querySelector('.form-error');
   if (anyError && anyError.textContent.trim().length > 0) {
-    // heurística: si hay campo name/email en registro, mostramos registro; si no, login
     const regName = document.getElementById('registro-usuario');
     if (regName) abrirModalRegistro(); else abrirModalLogin();
   }
@@ -73,7 +64,7 @@ window.playClick = function () {
   s.play();
 };
 
-// Click con redirección
+// Click con redirección y espera del rugido
 window.playClickAndGo = function (event, url) {
   event.preventDefault();
   const s = document.getElementById('click-sound');
@@ -86,7 +77,7 @@ window.playClickAndGo = function (event, url) {
   s.play();
   const go = () => window.location.href = url;
   s.onended = go;
-  setTimeout(go, 1000); // fallback si no se dispara 'onended'
+  setTimeout(go, 1000); // mismo delay de “Jugar”
 };
 
 // Autoplay música después de cualquier clic
@@ -96,15 +87,13 @@ document.addEventListener('click', function iniciarMusica() {
   document.removeEventListener('click', iniciarMusica);
 });
 
-// === MODAL LOGIN/REGISTRO ===
-// Nota: tu CSS deja .modal-auth con display:flex SIEMPRE,
-// pero el HTML trae style="display:none". Por eso acá cambiamos el style inline:
+//  MODAL LOGIN/REGISTRO
 window.abrirModalLogin = function () {
   const modal = document.getElementById('modal-auth');
   if (!modal) return;
   modal.style.display = 'flex';
   mostrarLogin();
-  document.body.classList.add('modal-open'); // opcional: bloquear scroll
+  document.body.classList.add('modal-open'); 
 };
 window.abrirModalRegistro = function () {
   const modal = document.getElementById('modal-auth');
@@ -125,7 +114,6 @@ window.mostrarLogin = function () {
   const r = document.getElementById('registro-form');
   if (l) l.style.display = 'block';
   if (r) r.style.display = 'none';
-  // foco al email de login (ID nuevo)
   const i = document.getElementById('login-email');
   if (i) setTimeout(()=>i.focus(), 50);
 };
@@ -138,8 +126,7 @@ window.mostrarRegistro = function () {
   if (i) setTimeout(()=>i.focus(), 50);
 };
 
-
-// === MODAL "¿CUÁNTOS JUGADORES?" ===
+//  MODAL JUGADORES
 window.abrirModalJugadores = function () {
   const m = document.getElementById('modal-players');
   if (!m) {
@@ -147,18 +134,17 @@ window.abrirModalJugadores = function () {
     alert('No se encontró el modal de jugadores. Verifica el HTML.');
     return;
   }
-  m.style.display = 'flex';           // mostrar modal
+  m.style.display = 'flex';
   document.body.classList.add('modal-open');
 };
 
 window.cerrarModalJugadores = function () {
   const m = document.getElementById('modal-players');
   if (!m) return;
-  m.style.display = 'none';           // ocultar modal
+  m.style.display = 'none';
   document.body.classList.remove('modal-open');
 };
 
-// opcional: cerrar con ESC
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     const m = document.getElementById('modal-players');
@@ -166,9 +152,21 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-
-// === BORRAR/INUTILIZAR handlers FAKE ===
-// Ya NO usés estas funciones; ahora el <form> hace POST a Laravel.
-// Las dejo vacías por si quedaron en algún onclick residual (no deberían).
 window.loginUsuario = function () {};
 window.registrarUsuario = function () {};
+
+// MISMA ESPERA DE RUGIDO PARA OPCIONES Y EXTRA
+document.addEventListener('DOMContentLoaded', () => {
+  const botones = [
+    { id: 'btn-juego', url: '/juego' },
+    { id: 'btn-opciones', url: '/opciones' },
+    { id: 'btn-extra', url: '/extra' }
+  ];
+
+  botones.forEach(({ id, url }) => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', (e) => playClickAndGo(e, url));
+    }
+  });
+});

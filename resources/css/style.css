@@ -213,9 +213,9 @@ body::before {
   border: none;
 }
 
-/* input-with-eye: place a small button inside the input area */
+
 .input-with-eye{ position: relative; }
-.input-with-eye input{ width:100%; padding-right:44px; /* space for eye */ box-sizing: border-box; }
+.input-with-eye input{ width:100%; padding-right:44px; box-sizing: border-box; }
 .input-with-eye .eye-toggle{
   position: absolute;
   right: 10px;
@@ -229,8 +229,8 @@ body::before {
   justify-content: center;
   cursor: pointer;
   z-index: 3;
-  width: auto !important; /* override global .modal-content button rule */
-  margin: 0 !important;   /* override global margins */
+  width: auto !important; 
+  margin: 0 !important;   
 }
 .input-with-eye .eye-toggle svg{ width:18px; height:18px; display:block; }
 .input-with-eye .eye-toggle svg path,
@@ -416,12 +416,12 @@ body::before {
   html, body { overflow-y: auto; }
 }
 
-/* Password eye: ensure fixed button size and no layout shift (small, safe override) */
+
 .input-with-eye input { padding-right: 44px; box-sizing: border-box; }
 .input-with-eye .eye-toggle { width: 32px; height: 32px; padding: 6px; border-radius: 6px; }
 .input-with-eye .eye-toggle svg { width: 18px; height: 18px; display: block; }
 
-/* click-box indicator: visible by default, with subtle shadow to contrast on dark modal */
+
 .input-with-eye .eye-toggle svg .click-box {
   display: block;
   stroke: #fff;
@@ -429,22 +429,22 @@ body::before {
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
 }
 
-/* eye-open visible by default, eye-closed hidden until active */
+
 .input-with-eye .eye-toggle svg .eye-open { display: block; }
 .input-with-eye .eye-toggle svg .eye-closed { display: none; }
 
-/* When active: hide click-box and eye-open, show eye-closed */
+
 .input-with-eye .eye-toggle.active svg .click-box { display: none; }
 .input-with-eye .eye-toggle.active svg .eye-open { display: none; }
 .input-with-eye .eye-toggle.active svg .eye-closed { display: block; }
 
 .input-with-eye .eye-toggle:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,255,255,0.08); border-radius: 6px; }
 
-/* Stroke colors: open and click-box in white; closed eye will be slightly darker for contrast when shown */
+
 .input-with-eye .eye-toggle svg path,
 .input-with-eye .eye-toggle svg circle { stroke: #fff; }
 
-/* make the eye-open borders black for better contrast as requested */
+
 .input-with-eye .eye-toggle svg .eye-open path,
 .input-with-eye .eye-toggle svg .eye-open circle { stroke: #000; }
 .input-with-eye .eye-toggle.active svg path,
@@ -511,3 +511,4 @@ body::before {
   10%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
   100% { opacity: 0; transform: translateX(-50%) translateY(40px); }
 }
+
