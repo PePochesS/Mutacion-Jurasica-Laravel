@@ -59,7 +59,7 @@
       </div>
 
     @else
-      {{Finished games list with filter}}
+      {{-- Finished games list with filter --}}
       <section class="scoreboard">
         <form method="GET" class="mb-3" style="display:flex; gap:10px; align-items:center">
           <label class="me-2">Filter by players:</label>

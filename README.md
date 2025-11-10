@@ -6,6 +6,38 @@ Santiago Ramirez
 Victoria Marin
 Agustin Franco
 
+## Como Levantarlo
+
+Necesario:
+● XAMPP (o similar) → para el servidor Apache y la base de datos MySQL.
+● Composer → manejador de dependencias de PHP (necesario para Laravel).
+● Node.js + npm → para manejar los assets (JS, CSS, imágenes) con Vite.
+
+Pasos:
+Clonar o copiar el proyecto
+git clone https://github.com/PePochesS/Mutacion-Jurasica-Laravel.git
+
+entrar a la carpeta
+cd Mutación-Jurasica-Laravel
+
+Instalar dependencias
+
+Instalar dependencias de PHP / Laravel:
+composer install
+Instalar dependencias de Node.js / Vite:
+npm install
+
+Levantar el servidor
+para correr laravel:
+php artisan serve
+
+para levantar el entorno de desarrollo frontend:
+npm run dev
+
+(Activar esto en dos terminales distintas)
+
+Activar en php.ini ;extension.zip
+
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
 - Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
